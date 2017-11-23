@@ -26,6 +26,21 @@
 	<script type="text/javascript" src="js/parallax.js"></script>
 	<script type="text/javascript" src="js/nicescroll.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
+	<style>
+		.container {
+		    position: relative;
+		    width: 100%;
+		    height: 0;
+		    padding-bottom: 56.25%;
+		}
+		.video {
+		    position: absolute;
+		    top: 0;
+		    left: 0;
+		    width: 100%;
+		    height: 100%;
+		}
+	</style>
 </head>
 <body>
 	
@@ -101,11 +116,10 @@
 				<div class="col-md-6 animated wow fadeInRight">
 					<div class="features_list">
 						<h1 class="text-uppercase">วีดีโอสอน เข้าใช้งานระบบ.</h1>
-						<a href="#" class="app_store_btn text-uppercase" id="play_video" data-video="http://www.youtube.com/embed/Bm3NV3gGB2w?autoplay=1&showinfo=0">
-							<i class="play_icon"></i>
-							<span>ดูวีดีโอสอน</span>
-						</a>
-						
+						<div class="container">
+							<iframe src="https://www.youtube.com/embed/6eXrx-eDpTw?autoplay=1" 
+							frameborder="0" allowfullscreen class="video"></iframe>
+						</div>
 					</div>					
 				</div>
 			</div>
