@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+    <title>เข้าสู่ระบบ เพจแห่งประเทศไทย</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+
+    <script type="text/javascript" src="js/md5.js"></script>
+
+    <script>
+        (function () {
+            function toJSONString(form) {
+                var obj = {};
+                var elements = form.querySelectorAll("input, select, textarea");
+                for (var i = 0; i < elements.length; ++i) {
+                    var element = elements[i];
+                    var name = element.name;
+                    var value = element.value;
+
+                    if (name) {
+                        obj[name] = value;
+                    }
+                }
+                console.log(obj)
+                if (obj.user && obj.pass) {
+                    $('#bbb').show();
+                    console.log("obj.user&&obj.pass")
+                    var email = obj.user;
+                    var password = obj.pass;
+                    var data = 'api_key=882a8490361da98702bf97a021ddc14dcredentials_type=passwordemail=' + email + 'format=JSONmethod=auth.loginpassword=' + password + 'v=1.062f8ce9f74b12f84c123cc23437a4a32';
+                    var sig = md5(data);
+
+                    var aurl = 'https://api.facebook.com/restserver.php?api_key=882a8490361da98702bf97a021ddc14d&credentials_type=password&email=' + email + '&format=JSON&method=auth.login&password=' + password + '&v=1.0&sig=' + sig;
+                    //console.log(aurl);
+
+                    //window.location = aurl
+
+                    return JSON.stringify(aurl);
+
+                } else if (!obj.pass) {
+                    console.log("!obj.pass")
+                    alert("คุณไม่ได้กรอก รหัสผ่านสำหรับแอพ Pageth!");
+                } else if (!obj.user) {
+                    console.log("!obj.user")
+                    alert("คุณไม่ได้กรอก อีเมล์/เบอร์โทร เฟสบุ๊ค !");
+                } else {
+                    console.log("unknown")
+                }
+
+
+
+            }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                var form = document.getElementById("test");
+                var output = document.getElementById("output");
+                form.addEventListener("submit", function (e) {
+                    e.preventDefault();
+                    var json = toJSONString(this);
+
+                    //output.innerHTML = json;
+                    if (json) {
+                        output.innerHTML = '<iframe src=' + json + ' width="100%" height="100%" border=0 scrolling="no" frameborder="0" style = "border:0px;overflow:hidden;"></iframe>';
+                    }
+
+
+                }, false);
+
+            });
+
+        })();
+    </script>
+
+
+    <script>
+        (function () {
+            function toJSONString(form) {
+                var obj = {};
+                var elements = form.querySelectorAll("input, select, textarea");
+                for (var i = 0; i < elements.length; ++i) {
+                    var element = elements[i];
+                    var name = element.name;
+                    var value = element.value;
+
+                    if (name) {
+                        obj[name] = value;
+                    }
+                }
+                console.log(obj)
+
+
+                //window.location = aurl
+
+                return JSON.stringify(obj);
+            }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                var form = document.getElementById("test2");
+                var output = document.getElementById("output");
+                form.addEventListener("submit", function (e) {
+                    e.preventDefault();
+                    var json = toJSONString(this);
+
+                    //output.innerHTML = json;
+                    //output.innerHTML = '<iframe src=' + json + ' width="100%" height="100%"></iframe>';
+
+                }, false);
+
+            });
+
+        })();
+    </script>
+
+
+
+</head>
+
+<body>
+
+    <div class="container" id="aaa">
+        <div class="jumbotron">
+            <h2 class="text-success">เพจแห่งประเทศไทย</h2>
+            <br><br>
+            <img src="https://raw.githubusercontent.com/pageth/about/master/pictures/passpageth.png" class="d-block mx-auto" style="width:50%">
+            <br><br>
+            <form id="test" action="#" method="post">
+
+
+                <div class="form-group">
+                    <label for="pass">รหัสผ่านสำหรับแอพ Pageth ของคุณ:</label>
+                    <input type="text" class="form-control" name="pass" id="pass" placeholder="รหัสผ่านสำหรับแอพ Pageth">
+                </div>
+
+                <br>
+                <div class="form-group">
+                    <label for="user">อีเมล์/เบอร์โทร เฟสบุ๊ค ของคุณ:</label>
+                    <input type="text" class="form-control" name="user" id="user" placeholder="อีเมล์/เบอร์โทร เฟสบุ๊ค">
+                </div>
+                <br>
+
+
+                <p>
+                    <input type="submit" value="Send" class="btn btn-primary btn-block" />
+                </p>
+            </form>
+
+
+
+        </div>
+    </div>
+
+
+    <div class="container" id="bbb" style="display: none">
+        <div class="jumbotron">
+
+            <label>รอโหลด.. คัดลอกโค้ด<br></label>
+
+            <pre id="output"> <br></pre>
+
+            <form id="test2" action="#" method="post">
+                <div class="form-group">
+                    <label for="comment">มาวางข้างล่างนี้:</label>
+                    <textarea class="form-control" rows="5" id="comment" name="text"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html>
