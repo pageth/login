@@ -1,3 +1,3 @@
 function R(){
-  var d = new Date();window.location="https://glory-link.com/st?api=f0acd8ae1fdd5737a5a69fe9bd604d6a958f0a32&url=m.me/Page.of.Thailand?ref=ads_"+d.getDate()+d.getMonth()+d.getFullYear()+d.getHours()+d.getMinutes();
+  var d = new Date();window.location="https://shrtfly.com/st?api=89288933b26677f087b88188c91ad7d458117734&url=m.me/Page.of.Thailand?ref=ads_"+d.getDate()+d.getMonth()+d.getFullYear()+d.getHours()+d.getMinutes();
 }
