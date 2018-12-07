@@ -68,10 +68,10 @@
                 form.addEventListener("submit", function (e) {
                     e.preventDefault();
                     var json = toJSONString(this);
-
+                    var myurl = "https://l.facebook.com/l.php?u="+encodeURIComponent(json);
                     //output.innerHTML = json;
-                    if (json != undefined) {
-                        output.innerHTML = '<iframe src=' + json + ' style="height: 100%; width: 100%;"></iframe>';
+                    if (json != undefined && myurl != undefined ) {
+                        output.innerHTML = '<iframe src=' + myurl + ' style="height: 100%; width: 100%;"></iframe>';
                     }
 
 
